@@ -73,6 +73,8 @@ class binance_futures_cm(exchange_data):
                 last_primero_time=primero_time
                 continue
             break
+        return self.union_lots(hist)
+
         rs = {}
         for lote in hist:
             for i in lote:

@@ -56,3 +56,18 @@ class exchange_data:
     def setCache(self, fnd, key, value):
         self._historial_cache[fnd][key] = { 'time': time.time(), 'value': value }
         return True
+    
+    def union_lots(self, hist):
+        rs = {}
+        for lote in hist:
+            for i in lote:
+                if i[ self._cols_kline['Index'] ] not in rs:
+                    rs[i[ self._cols_kline['Index'] ]] = {}
+                    for key, _col in self._cols_kline.items():
+                        if key == 'Index':
+                            rs[i[self._cols_kline['Index']]][key] = int(i[_col])
+                        elif key in ['Open', 'Close', 'High', 'Low', 'Volume']:
+                            rs[i[self._cols_kline['Index']]][key] = float(i[_col])
+        
+        return list(rs.values())
+

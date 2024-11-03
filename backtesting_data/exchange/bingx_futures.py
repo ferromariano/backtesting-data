@@ -7,15 +7,12 @@ import logging
 import json
 from json import JSONDecodeError
 import time
-
 from urllib.parse import urlencode
 
 
 def check_required_parameter(value, name):
     if not value and value != 0:
         raise ValueError(f"ParameterRequiredError {name}") 
-
-
 def check_required_parameters(params):
     """validate multiple parameters
     params = [
@@ -26,22 +23,17 @@ def check_required_parameters(params):
     """
     for p in params:
         check_required_parameter(p[0], p[1])
-
-
 def cleanNoneValue(d) -> dict:
     out = {}
     for k in d.keys():
         if d[k] is not None:
             out[k] = d[k]
     return out
-
 def encoded_string(query, special=False):
     if special:
         return urlencode(query).replace("%40", "@").replace("%27", "%22")
     else:
         return urlencode(query, True).replace("%40", "@")
-
-
 class api_bingx_futures(object):
     def __init__(self, key=None, secret=None, **kwargs):
         self.base_url = "https://open-api.bingx.com"
@@ -136,7 +128,6 @@ class api_bingx_futures(object):
             raise      ValueError(f"ClientError({status_code}, {err['code']}, {err['msg']}, {response.headers})")   
         raise          ValueError(f"ServerError({status_code}, {response.text})")   
 
-
 class bingx_futures(exchange_data):
     _col_name_index = 'Index'
     _cols_kline = {
@@ -219,20 +210,7 @@ class bingx_futures(exchange_data):
                     raise TypeError(f"BINGX RESPONCE Error: {tmp['msg']}")
                     break
             break
-        rs = {}
-        for lote in hist:
-            for i in lote:
-                if i[ self._cols_kline['Index'] ] not in rs:
-                    rs[i[ self._cols_kline['Index'] ]] = {}
-                    for key, _col in self._cols_kline.items():
-                        if key == 'Index':
-                            rs[i[self._cols_kline['Index']]][key] = int(i[_col])
-                        elif key in ['Open', 'Close', 'High', 'Low', 'Volume']:
-                            rs[i[self._cols_kline['Index']]][key] = float(i[_col])
-                    #rs[i[0]] = i
-        
-        
-        return list(rs.values())
+        return self.union_lots(hist)
                 
 
     def __findKline(self, symbol, interval, start_time=None, end_time=None, limit=500):

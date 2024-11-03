@@ -219,20 +219,7 @@ class bingx_spot(exchange_data):
                     raise TypeError(f"BINGX RESPONCE Error: {tmp['msg']}")
                     break
             break
-        rs = {}
-        for lote in hist:
-            for i in lote:
-                if i[0] not in rs:
-                    rs[i[ self._cols_kline['Index'] ]] = {}
-                    for key, _col in self._cols_kline.items():
-                        if key == 'Index':
-                            rs[i[0]][key] = int(i[_col])
-                        elif key in ['Open', 'Close', 'High', 'Low', 'Volume']:
-                            rs[i[0]][key] = float(i[_col])
-                    #rs[i[0]] = i
-        
-        
-        return list(rs.values())
+        return self.union_lots(hist)
                 
 
     def __findKline(self, symbol, interval, start_time=None, end_time=None, limit=500):
