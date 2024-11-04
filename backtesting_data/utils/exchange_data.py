@@ -2,6 +2,9 @@ import os
 import logging
 import time
 
+import base64
+import string
+
 class exchange_data:
 
     _default_cache_path:str = './.cache/backtesting_data'
@@ -34,7 +37,11 @@ class exchange_data:
         return dir_path
 
     def get_path_file(self, symbol: str, interval: str) -> str:
-        return f"{self.cache_path_exchange}/{symbol}_{interval}.{self._cache_type}"
+
+
+        valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+        _symbol = ''.join(c for c in symbol if c in valid_chars)
+        return f"{self.cache_path_exchange}/{_symbol}_{interval}.{self._cache_type}"
 
 
     def hasInCache(self, fnd, key):
@@ -70,4 +77,3 @@ class exchange_data:
                             rs[i[self._cols_kline['Index']]][key] = float(i[_col])
         
         return list(rs.values())
-

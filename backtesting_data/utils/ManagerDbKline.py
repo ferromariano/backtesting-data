@@ -1,6 +1,7 @@
 import os
 import datetime
 from backtesting_data.utils.class_loader import ClassLoader
+from backtesting_data.utils.exchange_ccxt import exchange_ccxt
 from backtesting_data.utils.timeframe import xToTimestampMil, intervalToSeconds
 import logging
 from backtesting_data.utils.exchange_data import exchange_data
@@ -327,13 +328,18 @@ class ManagerDbKline():
         if exchange_name not in ManagerDbKline._cache_exchange:
             try:
                 exchange_class = ManagerDbKline._class_loader.load_class(exchange_name)
+                _exchange_attr = {
+                    'cache_path': ManagerDbKline.cache_path,
+                    'cache_type': ManagerDbKline.cache_type,
+                }
+                _exchange = exchange_class(**_exchange_attr)
             except (FileNotFoundError, ImportError, AttributeError) as e:
-                raise e
-            _exchange_attr = {
-                'cache_path': ManagerDbKline.cache_path,
-                'cache_type': ManagerDbKline.cache_type,
-            }
-            _exchange = exchange_class(**_exchange_attr)
+                try:
+                    _exchange = exchange_ccxt()
+                    _exchange.setExchangeName(exchange_name)
+                except (FileNotFoundError, ImportError, AttributeError) as e:
+                    raise e
+
             ManagerDbKline._cache_exchange[exchange_name] = ManagerDbKlineExchange(exchange=_exchange, logger=ManagerDbKline.logger, cache=cache)
         
         return ManagerDbKline._cache_exchange[exchange_name]
