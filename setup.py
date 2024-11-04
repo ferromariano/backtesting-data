@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 VERSION = '0.0.1' 
-DESCRIPTION = 'Libreria para obtener datos para backtesting.py'
-LONG_DESCRIPTION = 'En este paquete se encuentran funciones para obtener datos de distintos exchange para poder usarlos en backtesting.py'
-
+DESCRIPTION = 'Libreria para obtener datos para usar en backtesting.py'
+with open("README.md", "r") as fh:
+    LONG_DESCRIPTION = fh.read()
 # Configurando
 setup(
         name="backtesting_data", 
@@ -12,6 +12,8 @@ setup(
         author_email="<ferro.mariano@gmail.com>",
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
+        long_description_content_type="text/markdown",
+        url="https://github.com/ferromariano/backtesting-data",
         packages=find_packages(),
         install_requires=[
             'pandas',
