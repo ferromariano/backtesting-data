@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: backtesting_data
-Version: 0.0.4
+Version: 0.0.5
 Summary: Libreria para obtener datos para usar en backtesting.py
 Home-page: https://github.com/ferromariano/backtesting-data
 Author: Mariano Damian Ferro Villanueva
@@ -51,7 +51,7 @@ class SmaCross(Strategy):
             self.sell()
 
 
-BTCUSDT = historyCoin('binance_future', 'BTCUSDT', '5m', 200, end_time=datetime.datetime(2024, 10, 25, 20, 30))
+BTCUSDT = historyCoin('binanceusdm', 'BTCUSDT', '5m', 200, end_time=datetime.datetime(2024, 10, 25, 20, 30))
 
 bt = Backtest(BTCUSDT, SmaCross, commission=.002,
               exclusive_orders=True)

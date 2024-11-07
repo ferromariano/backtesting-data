@@ -266,16 +266,15 @@ class ManagerDbKlineExchange():
         self.logger.debug(f"getData(symbol:{symbol}, interval:{interval}, start_time:{start_time}, end_time:{end_time}, limit:{limit}, _self_origin:{_self_origin}) %s",'init')
 
         
-        pd = self._getDb(symbol, interval, True)
-        
+        _db = self._getDb(symbol, interval, True)
         if end_time is None:
-            pd_filter = pd[(pd[exchange_data._col_name_index] >= start_time)]
+            pd_filter = _db[(_db[exchange_data._col_name_index] >= start_time)]
             if len(pd_filter):
                 secgs = self._intervalToSeconds(interval)
                 if (pd_filter['start_time'][ pd_filter.first_valid_index() ]-start_time) > secgs*1000:
                     pd_filter=[]
         else:
-            pd_filter = pd[(pd[exchange_data._col_name_index] >= start_time) & (pd[exchange_data._col_name_index] <= end_time)]
+            pd_filter = _db[(_db[exchange_data._col_name_index] >= start_time) & (_db[exchange_data._col_name_index] <= end_time)]
         
         if len(pd_filter) < limit and not _self_origin and not onlyDb:
             self.loadHistorical(symbol, interval, start_time=start_time, end_time=end_time, limit=limit)
@@ -287,7 +286,7 @@ class ManagerDbKlineExchange():
             buf = io.StringIO()
             pd_filter.info(False,show_counts=True, buf=buf)
             self.logger.debug(f"getData\n {(buf.getvalue())} %s", 'end')
-        
+
         return pd_filter
 
     def getDatatoEnd( self, symbol, interval='5m', limit=100, end_time=None ):
@@ -310,7 +309,8 @@ class ManagerDbKlineExchange():
         #col_rename = {'start_time': 'Start_time', 'close': 'Close', 'open': 'Open', 'high': 'High', 'low': 'Low', 'volume_taker_buy_base': 'Volume'}
         #data.rename(columns=col_rename, inplace=True)
         data.reset_index(inplace=True, drop=True)
-        data.set_index(exchange_data._col_name_index, inplace=True, drop=False)
+        data[exchange_data._col_name_index] = pd.to_datetime(data[exchange_data._col_name_index], unit='ms')
+        data.set_index(exchange_data._col_name_index, inplace=True, drop=True)
         
         return data
 

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 DESCRIPTION = 'Libreria para obtener datos para usar en backtesting.py'
 with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
