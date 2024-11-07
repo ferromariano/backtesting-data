@@ -55,7 +55,7 @@ class exchange_ccxt_data(exchange_data):
             break
         hist.drop_duplicates(inplace=True)
 
-        return self.parce_lot(data)
+        return hist.to_dict(orient='records')
 
     def parce_lot(self, lot):
         rs = {}

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: backtesting_data
-Version: 0.0.5
+Version: 0.0.6
 Summary: Libreria para obtener datos para usar en backtesting.py
 Home-page: https://github.com/ferromariano/backtesting-data
 Author: Mariano Damian Ferro Villanueva
