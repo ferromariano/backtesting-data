@@ -4,7 +4,7 @@ Accesde a datos historicos rapidamente :D para usar en backtesting.py
 
 ## Installation
 
-    $ pip install backtesting backtesting_data
+    $ pip install backtesting backtesting-data
 
 ## Usage
 
@@ -30,7 +30,7 @@ class SmaCross(Strategy):
             self.sell()
 
 
-BTCUSDT = historyCoin('binance_future', 'BTCUSDT', '5m', 200, end_time=datetime.datetime(2024, 10, 25, 20, 30))
+BTCUSDT = historyCoin('binanceusdm', 'BTCUSDT', '5m', 200, end_time=datetime.datetime(2024, 10, 25, 20, 30))
 
 bt = Backtest(BTCUSDT, SmaCross, commission=.002,
               exclusive_orders=True)

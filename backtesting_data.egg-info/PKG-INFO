@@ -1,0 +1,60 @@
+Metadata-Version: 2.1
+Name: backtesting_data
+Version: 0.0.4
+Summary: Libreria para obtener datos para usar en backtesting.py
+Home-page: https://github.com/ferromariano/backtesting-data
+Author: Mariano Damian Ferro Villanueva
+Author-email: <ferro.mariano@gmail.com>
+Keywords: python,backtesting.py,backtesting,exchange
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Education
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: ccxt
+Requires-Dist: datetime
+Requires-Dist: logging
+
+# Backtesting data
+
+Accesde a datos historicos rapidamente :D para usar en backtesting.py
+
+## Installation
+
+    $ pip install backtesting backtesting-data
+
+## Usage
+
+```python
+from backtesting import Backtest, Strategy
+from backtesting.lib import crossover
+
+from backtesting.test import SMA
+from backtesting_data import historySymbol
+import datetime
+
+
+class SmaCross(Strategy):
+    def init(self):
+        price = self.data.Close
+        self.ma1 = self.I(SMA, price, 10)
+        self.ma2 = self.I(SMA, price, 20)
+
+    def next(self):
+        if crossover(self.ma1, self.ma2):
+            self.buy()
+        elif crossover(self.ma2, self.ma1):
+            self.sell()
+
+
+BTCUSDT = historyCoin('binance_future', 'BTCUSDT', '5m', 200, end_time=datetime.datetime(2024, 10, 25, 20, 30))
+
+bt = Backtest(BTCUSDT, SmaCross, commission=.002,
+              exclusive_orders=True)
+stats = bt.run()
+bt.plot()
+```

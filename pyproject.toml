@@ -13,7 +13,6 @@ packages = [
 python = "^3.10"
 pandas = "^2.2.3"
 numpy = "^2.1.2"
-binance-futures-connector = "^4.1.0"
 ccxt = "^4.4.25"
 
 [tool.poetry.group.dev.dependencies]

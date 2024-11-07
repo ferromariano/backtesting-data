@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = '0.0.1' 
+VERSION = '0.0.4'
 DESCRIPTION = 'Libreria para obtener datos para usar en backtesting.py'
 with open("README.md", "r") as fh:
     LONG_DESCRIPTION = fh.read()
@@ -18,17 +18,9 @@ setup(
         install_requires=[
             'pandas',
             'numpy',
-            'requests',
             'ccxt',
             'datetime',
-            'time',
-            'json',
-            'os',
-            'sys',
-            'csv',
             'logging',
-            'binance-futures-connector',
-            'load-dotenv',
         ], 
         keywords=['python', 'backtesting.py', 'backtesting', 'exchange'],
         classifiers= [
